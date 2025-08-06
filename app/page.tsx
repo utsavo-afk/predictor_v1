@@ -1,102 +1,249 @@
-import Image from "next/image";
+import { auth } from "@/auth";
+import SocialSignOutButton from "@/components/auth/SocialSignOutButton";
+import SocialSignInButton from "@/components/auth/SocialSingInButton";
+import { headers as nextheaders } from "next/headers";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import Link from "next/link";
+import { 
+  TrophyIcon, 
+  UsersIcon, 
+  TargetIcon, 
+  ArrowRightIcon
+} from "lucide-react";
 
-export default function Home() {
+export default async function Home() {
+  const headers = await nextheaders();
+  const authCtx = await auth.api.getSession({
+    headers,
+  });
+
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50">
+      {/* Header */}
+      <header className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4 flex items-center justify-between">
+          <div className="flex items-center space-x-2">
+            <TrophyIcon className="h-6 w-6 sm:h-8 sm:w-8 text-blue-600" />
+            <h1 className="text-xl sm:text-2xl font-bold text-slate-900">Predictor</h1>
+          </div>
+          <div className="flex-shrink-0">
+            {authCtx ? (
+              <SocialSignOutButton name="Sign Out" />
+            ) : (
+              <SocialSignInButton 
+                provider="google" 
+                text="Sign in" 
+                variant="outline"
+                size="sm"
+                className="text-xs sm:text-sm whitespace-nowrap"
+              />
+            )}
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+      </header>
+
+      {/* Hero Section */}
+      <section className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8">
+        <div className="container mx-auto text-center">
+          <Badge variant="secondary" className="mb-4 sm:mb-6 text-xs sm:text-sm">
+            🏆 Premier League Predictions
+          </Badge>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-slate-900 mb-4 sm:mb-6 leading-tight">
+            Predict. Compete. <br className="hidden sm:block" />
+            <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              Conquer
+            </span>
+          </h1>
+          <p className="text-base sm:text-lg lg:text-xl text-slate-600 mb-6 sm:mb-8 max-w-xs sm:max-w-2xl lg:max-w-3xl mx-auto leading-relaxed px-4 sm:px-0">
+            Join the ultimate Premier League prediction league with your friends. 
+            Create groups, predict match outcomes, and climb the leaderboard to become 
+            the ultimate football prophet.
+          </p>
+          
+          {!authCtx && (
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center px-4 sm:px-0">
+              <SocialSignInButton 
+                provider="google" 
+                text="Get Started with Google" 
+                size="lg"
+                className="w-full sm:w-auto sm:min-w-[250px]"
+              />
+              <Button variant="outline" size="lg" className="w-full sm:w-auto sm:min-w-[200px]">
+                <span className="hidden sm:inline">Learn More</span>
+                <span className="sm:hidden">Learn More</span>
+                <ArrowRightIcon className="ml-2 h-4 w-4" />
+              </Button>
+            </div>
+          )}
+
+          {authCtx && (
+            <div className="max-w-xs sm:max-w-2xl mx-auto px-4 sm:px-0">
+              <Card className="mb-6 sm:mb-8">
+                <CardHeader className="pb-4 sm:pb-6">
+                  <CardTitle className="text-green-600 text-lg sm:text-xl">Welcome back!</CardTitle>
+                  <CardDescription className="text-sm sm:text-base">You&apos;re signed in and ready to start predicting</CardDescription>
+                </CardHeader>
+                <CardContent className="pt-0">
+                  <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
+                    <Link href="/group">
+                      <Button size="lg" className="w-full sm:w-auto">Go to Groups</Button>
+                    </Link>
+                    <Button variant="outline" size="lg" className="w-full sm:w-auto">Join a Group</Button>
+                  </div>
+                </CardContent>
+              </Card>
+              
+              {/* User Session Debug Info - Remove in production */}
+              <details className="text-left">
+                <summary className="cursor-pointer text-sm text-slate-500 hover:text-slate-700">
+                  Session Debug Info
+                </summary>
+                <pre className="bg-slate-100 p-4 rounded-md text-xs overflow-auto mt-2">
+                  {JSON.stringify(authCtx, null, 2)}
+                </pre>
+              </details>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8 bg-white">
+        <div className="container mx-auto">
+          <div className="text-center mb-12 sm:mb-16">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-900 mb-3 sm:mb-4">
+              Why Choose Predictor?
+            </h2>
+            <p className="text-base sm:text-lg text-slate-600 max-w-sm sm:max-w-2xl mx-auto px-4 sm:px-0">
+              Experience the thrill of Premier League predictions with features designed 
+              for competitive fun among friends.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+            <Card className="text-center border-2 hover:border-blue-200 transition-colors p-4 sm:p-6">
+              <CardHeader className="pb-4">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                  <UsersIcon className="h-5 w-5 sm:h-6 sm:w-6 text-blue-600" />
+                </div>
+                <CardTitle className="text-lg sm:text-xl">Create Groups</CardTitle>
+                <CardDescription className="text-sm sm:text-base">
+                  Start your own prediction league and invite friends to join the competition
+                </CardDescription>
+              </CardHeader>
+            </Card>
+
+            <Card className="text-center border-2 hover:border-purple-200 transition-colors p-4 sm:p-6">
+              <CardHeader className="pb-4">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-purple-100 rounded-lg flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                  <TargetIcon className="h-5 w-5 sm:h-6 sm:w-6 text-purple-600" />
+                </div>
+                <CardTitle className="text-lg sm:text-xl">Smart Predictions</CardTitle>
+                <CardDescription className="text-sm sm:text-base">
+                  Predict match outcomes with our intuitive interface and track your accuracy
+                </CardDescription>
+              </CardHeader>
+            </Card>
+
+            <Card className="text-center border-2 hover:border-green-200 transition-colors p-4 sm:p-6 md:col-span-1">
+              <CardHeader className="pb-4">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-green-100 rounded-lg flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                  <TrophyIcon className="h-5 w-5 sm:h-6 sm:w-6 text-green-600" />
+                </div>
+                <CardTitle className="text-lg sm:text-xl">Live Leaderboards</CardTitle>
+                <CardDescription className="text-sm sm:text-base">
+                  Compete with friends and see who&apos;s the ultimate Premier League predictor
+                </CardDescription>
+              </CardHeader>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* How It Works Section */}
+      <section className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8 bg-slate-50">
+        <div className="container mx-auto">
+          <div className="text-center mb-12 sm:mb-16">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-900 mb-3 sm:mb-4">
+              How It Works
+            </h2>
+            <p className="text-base sm:text-lg text-slate-600">
+              Get started in three simple steps
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-12 max-w-5xl mx-auto">
+            <div className="text-center">
+              <div className="w-12 h-12 sm:w-16 sm:h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
+                <span className="text-lg sm:text-2xl font-bold text-white">1</span>
+              </div>
+              <h3 className="text-lg sm:text-xl font-semibold mb-2 sm:mb-3">Sign Up & Create</h3>
+              <p className="text-sm sm:text-base text-slate-600 px-2 sm:px-0">
+                Sign in with Google and create your prediction group or join an existing one
+              </p>
+            </div>
+
+            <div className="text-center">
+              <div className="w-12 h-12 sm:w-16 sm:h-16 bg-purple-600 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
+                <span className="text-lg sm:text-2xl font-bold text-white">2</span>
+              </div>
+              <h3 className="text-lg sm:text-xl font-semibold mb-2 sm:mb-3">Make Predictions</h3>
+              <p className="text-sm sm:text-base text-slate-600 px-2 sm:px-0">
+                Predict the outcomes of upcoming Premier League matches before they start
+              </p>
+            </div>
+
+            <div className="text-center">
+              <div className="w-12 h-12 sm:w-16 sm:h-16 bg-green-600 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
+                <span className="text-lg sm:text-2xl font-bold text-white">3</span>
+              </div>
+              <h3 className="text-lg sm:text-xl font-semibold mb-2 sm:mb-3">Compete & Win</h3>
+              <p className="text-sm sm:text-base text-slate-600 px-2 sm:px-0">
+                Earn points for correct predictions and climb the leaderboard to victory
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      {!authCtx && (
+        <section className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-blue-600 to-purple-600">
+          <div className="container mx-auto text-center">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-4 sm:mb-6">
+              Ready to Start Predicting?
+            </h2>
+            <p className="text-base sm:text-lg lg:text-xl text-blue-100 mb-6 sm:mb-8 max-w-xs sm:max-w-2xl mx-auto px-4 sm:px-0">
+              Join thousands of football fans already competing in prediction leagues
+            </p>
+            <SocialSignInButton 
+              provider="google" 
+              text="Sign Up with Google" 
+              variant="secondary"
+              size="lg"
+              className="w-full sm:w-auto sm:min-w-[250px] max-w-sm mx-auto"
+            />
+          </div>
+        </section>
+      )}
+
+      {/* Footer */}
+      <footer className="bg-slate-900 text-white py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
+        <div className="container mx-auto">
+          <div className="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
+            <div className="flex items-center space-x-2">
+              <TrophyIcon className="h-5 w-5 sm:h-6 sm:w-6" />
+              <span className="text-lg sm:text-xl font-bold">Predictor</span>
+            </div>
+            <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-4 lg:space-x-6 text-xs sm:text-sm text-slate-400 text-center">
+              <span>© 2025 Predictor. All rights reserved.</span>
+              <span className="hidden sm:inline">•</span>
+              <span>Premier League Prediction Game</span>
+            </div>
+          </div>
+        </div>
       </footer>
     </div>
   );

@@ -1,0 +1,24 @@
+# Ensure LF line endings for all text files
+* text=auto eol=lf
+
+# TypeScript/JavaScript files
+*.ts text eol=lf
+*.js text eol=lf
+*.json text eol=lf
+
+# Configuration files
+*.md text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+
+# Ensure Windows scripts keep CRLF
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Binary files
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
